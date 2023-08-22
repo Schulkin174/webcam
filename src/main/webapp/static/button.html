@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Camera ON</title>
+</head>
+<body>
+<button id="startButton">Включить камеру</button>
 
+<script>
+   document.getElementById('startButton').addEventListener('click', async () => {
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+        if (videoDevices.length === 0) {
+            console.log('Нет доступных видеоустройств.');
+            return;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const videoElement = document.createElement('video');
+        videoElement.srcObject = stream;
+        document.body.appendChild(videoElement);
+        await videoElement.play();
+
+        console.log('Камера включена');
+    } catch (error) {
+        console.error('Ошибка при включении камеры:', error);
+    }
+});
+
+</script>
+
+
+</body>
+</html>
